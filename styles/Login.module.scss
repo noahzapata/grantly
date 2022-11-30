@@ -1,0 +1,18 @@
+.field {
+  display: flex;
+  margin-top: 2rem;
+  min-width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  border-radius: 2rem;
+  min-width: 100%;
+  flex-direction: column;
+  @media (min-width: 760px) {
+    border: 2px solid rgb(255, 190, 136);
+    padding: 5rem;
+  }
+}

@@ -14,12 +14,20 @@
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
     "@mui/styled-engine-sc": "^5.10.14",
+    "@mui/x-date-pickers": "^5.0.8",
+    "@mui/x-date-pickers-pro": "^5.0.8",
+    "date-fns": "^2.29.3",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.3",
+    "formik": "^2.2.9",
+    "js-cookie": "^3.0.1",
     "next": "13.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-jwt": "^1.1.7",
+    "redux": "^4.2.0",
     "sass": "^1.56.1",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "yup": "^0.32.11"
   }
 }

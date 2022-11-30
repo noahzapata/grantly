@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
 import NavBarMUI from './NavBarMUI';
+import styles from '../styles/Home.module.scss';
+import Footer from './Footer';
 
-const Layout = (title, children) => {
+const Layout = ({ footer = false, title, children, classMain = true }) => {
   return (
     <>
       <Head>
@@ -10,7 +12,16 @@ const Layout = (title, children) => {
         <meta name='description' content='Grantly' />
         <link rel='icon' href='/LOGO.png' />
       </Head>
-      <NavBarMUI />
+
+      <main>
+        <div className={styles.container}>
+          <NavBarMUI />
+          <main className={classMain ? styles.main : undefined}>
+            {children}
+          </main>
+          {footer ? <Footer /> : <></>}
+        </div>
+      </main>
     </>
   );
 };
