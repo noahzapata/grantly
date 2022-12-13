@@ -8,10 +8,17 @@ body {
 
 a {
   color: inherit;
+  cursor: pointer;
   text-decoration: none;
+}
+button {
+  cursor: pointer;
 }
 
 * {
+  box-sizing: border-box;
+}
+div {
   box-sizing: border-box;
 }
 

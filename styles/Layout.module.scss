@@ -2,44 +2,14 @@
   // padding: 0 2rem;
 }
 
-.HomeGrid {
-  display: grid;
-  width: 100%;
-  gap: 1rem;
-  padding: 0px 1rem;
-  grid-template-columns: repeat(1, 1fr);
-  @media (min-width: 600px) {
-    padding: 0px 1.5rem;
-    gap: 2rem;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media (min-width: 768px) {
-    padding: 0px 1.5rem;
-    gap: 2rem;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media (min-width: 1200px) {
-    width: 100%;
-    gap: 1rem;
-    padding: 0px;
-    grid-template-columns: repeat(4, 1fr);
-  }
-  @media (min-width: 1800px) {
-    width: 100%;
-    gap: 1rem;
-    padding: 0px;
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
 .main {
-  width: 100%;
-  @media (min-width: 1280px) {
-    width: 80%;
-  }
-  @media (min-width: 1680px) {
-    width: 60%;
-  }
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
 }
 
 .footer {

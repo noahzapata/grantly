@@ -60,8 +60,25 @@ const SignUpBody = () => {
       },
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (values, { setSubmitting, resetForm }) => {
+      fetch('http://localhost:8080/api/users/signup', {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => response.json())
+        .then((values) => {
+          console.log('Success:', values);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        })
+        .finally(() => {
+          setSubmitting(true);
+          resetForm();
+        });
     },
   });
 
@@ -69,7 +86,7 @@ const SignUpBody = () => {
     <main className={styles.signUpMain}>
       <form onSubmit={formik.handleSubmit} className={styles.container}>
         <Typography
-          variant='h1'
+          variant='h2'
           fontSize={'3rem'}
           align='center'
           component='div'

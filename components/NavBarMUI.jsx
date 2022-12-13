@@ -9,13 +9,12 @@ import {
 import PaletteIcon from '@mui/icons-material/Palette';
 import { useJwt } from 'react-jwt';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import useGetCookies from '../services/Cookies/useGetCookies';
-
+import Cookies from 'js-cookie';
 import React from 'react';
 import Link from 'next/link';
 
 const NavBarMUI = () => {
-  const user = useGetCookies('lausrin');
+  const user = Cookies.get('granusr');
   const { isExpired } = useJwt(user);
   const auth = isExpired;
   return (
@@ -31,7 +30,12 @@ const NavBarMUI = () => {
             <PaletteIcon />
           </IconButton>
         </Link>
-        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+        <Typography
+          variant='h1'
+          fontSize={'1.27rem'}
+          component='div'
+          sx={{ flexGrow: 1 }}
+        >
           <Link href='/'>GRANTLY</Link>
         </Typography>
         <Stack direction='row' spacing={2}>

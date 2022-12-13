@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import styles from '../styles/Login.module.scss';
 import * as yup from 'yup';
 import { Button, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import { addUserData, setUserLogin } from '../store/slices/userSlice';
+
+import { useDispatch } from 'react-redux';
 
 const validationSchema = yup.object({
   email: yup
@@ -17,14 +23,60 @@ const validationSchema = yup.object({
 });
 
 const LoginBody = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  // eslint-disable-next-line no-unused-vars
+  const [error, setError] = useState(null);
+
+  const getDataUser = async () => {
+    await axios
+      .get(`http://localhost:8080/api/users/data`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('granusr')}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res;
+        console.log(data);
+        dispatch(addUserData(data.data));
+      })
+      .catch((err) => {
+        console.error(error);
+        setError(err);
+      });
+  };
+
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      await fetch('http://localhost:8080/api/users/signin', {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => response.json())
+        .then((values) => {
+          Cookies.remove('granusr');
+          Cookies.set('granusr', values.data.token);
+          dispatch(setUserLogin({ isLogin: true }));
+          console.log('Success:', values);
+          router.push('/');
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        })
+        .finally(() => {
+          setSubmitting(true);
+          resetForm();
+          router.push('/');
+          getDataUser();
+        });
     },
   });
 
@@ -32,7 +84,7 @@ const LoginBody = () => {
     <main>
       <form onSubmit={formik.handleSubmit} className={styles.container}>
         <Typography
-          variant='h1'
+          variant='h2'
           align='center'
           fontSize={'3rem'}
           component='div'
@@ -58,6 +110,7 @@ const LoginBody = () => {
           <TextField
             fullWidth
             id='password'
+            autoComplete='true'
             size='small'
             name='password'
             label='Password'

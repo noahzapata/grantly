@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
 import NavBarMUI from './NavBarMUI';
-import styles from '../styles/Home.module.scss';
+import styles from '../styles/Layout.module.scss';
 import Footer from './Footer';
 
-const Layout = ({ footer = false, title, children, classMain = true }) => {
+const Layout = ({ footer = false, title, children, classMain = null }) => {
   return (
     <>
       <Head>
@@ -16,9 +16,7 @@ const Layout = ({ footer = false, title, children, classMain = true }) => {
       <main>
         <div className={styles.container}>
           <NavBarMUI />
-          <main className={classMain ? styles.main : undefined}>
-            {children}
-          </main>
+          <main className={classMain || styles.main}>{children}</main>
           {footer ? <Footer /> : <></>}
         </div>
       </main>
