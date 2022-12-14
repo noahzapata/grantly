@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import styles from '../styles/SignUp.module.scss';
 import * as yup from 'yup';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
+import { addUserData, setUserLogin } from '../store/slices/userSlice';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
 import { format } from 'date-fns';
+import { useRouter } from 'next/router';
 import { sub } from 'date-fns/fp';
 
 const validationSchema = yup.object({
@@ -45,9 +50,50 @@ const validationSchema = yup.object({
 });
 
 const SignUpBody = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [error, setError] = useState(null);
+
+  const getDataUser = async () => {
+    await axios
+      .get(`http://localhost:8080/api/users/data`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('granusr')}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res;
+        console.log(data.data);
+        dispatch(
+          addUserData({
+            profilePicture: data.data.profilePicture,
+            firstName: data.data.firstName,
+            lastName: data.data.lastName,
+            birthdate: data.data.birthdate,
+            address: {
+              country: data.data.address.country,
+              province: data.data.address.province,
+              city: data.data.address.city,
+            },
+            email: data.data.email,
+            mobile: data.data.mobile,
+            comments: data.data.comments,
+            favs: data.data.favs,
+            products: data.data.products,
+            shoppingHistory: data.data.shoppingHistory,
+          })
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err);
+      });
+  };
+
   const formik = useFormik({
     initialValues: {
       email: '',
+      profilePicture: '',
       password: '',
       firstName: '',
       lastName: '',
@@ -71,6 +117,11 @@ const SignUpBody = () => {
         .then((response) => response.json())
         .then((values) => {
           console.log('Success:', values);
+          Cookies.remove('granusr');
+          Cookies.set('granusr', values.data.token);
+          dispatch(setUserLogin({ isLogin: true }));
+          console.log('Success:', values);
+          router.push('/');
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -78,6 +129,8 @@ const SignUpBody = () => {
         .finally(() => {
           setSubmitting(true);
           resetForm();
+          router.push('/');
+          getDataUser();
         });
     },
   });

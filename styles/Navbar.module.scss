@@ -1,0 +1,12 @@
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  @media (min-width: 1280px) {
+    width: 80%;
+  }
+  @media (min-width: 1680px) {
+    width: 60%;
+  }
+}

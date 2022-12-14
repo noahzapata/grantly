@@ -76,6 +76,7 @@ const ProductCard = ({
               size='large'
               edge='start'
               style={{
+                zIndex: 3,
                 background: 'primary',
                 border: '2px solid #1976d2',
                 marginBottom: '1rem',

@@ -25,7 +25,6 @@ const validationSchema = yup.object({
 const LoginBody = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  // eslint-disable-next-line no-unused-vars
   const [error, setError] = useState(null);
 
   const getDataUser = async () => {
@@ -37,11 +36,29 @@ const LoginBody = () => {
       })
       .then((res) => {
         const { data } = res;
-        console.log(data);
-        dispatch(addUserData(data.data));
+        console.log(data.data);
+        dispatch(
+          addUserData({
+            profilePicture: data.data.profilePicture,
+            firstName: data.data.firstName,
+            lastName: data.data.lastName,
+            birthdate: data.data.birthdate,
+            address: {
+              country: data.data.address.country,
+              province: data.data.address.province,
+              city: data.data.address.city,
+            },
+            email: data.data.email,
+            mobile: data.data.mobile,
+            comments: data.data.comments,
+            favs: data.data.favs,
+            products: data.data.products,
+            shoppingHistory: data.data.shoppingHistory,
+          })
+        );
       })
       .catch((err) => {
-        console.error(error);
+        console.error(err);
         setError(err);
       });
   };

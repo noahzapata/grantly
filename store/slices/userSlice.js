@@ -1,15 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  dropdown: false,
   profilePicture: '',
   firstName: '',
   lastName: '',
-  country: '',
-  email: '',
   birthdate: '',
-  genre: '',
+  address: {
+    country: '',
+    province: '',
+    city: '',
+  },
+  email: '',
   mobile: '',
+  comments: [],
+  favs: [],
+  products: [],
+  shoppingHistory: [],
+
   isLogin: false,
 };
 
@@ -18,13 +25,19 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     addUserData: (state, action) => {
-      (state.firstName = action.payload.firstName),
-        (state.country = action.payload.country),
+      (state.profilePicture = action.payload.profilePicture),
         (state.firstName = action.payload.firstName),
         (state.lastName = action.payload.lastName),
+        (state.birthdate = action.payload.birthdate),
+        (state.address.country = action.payload.address.country),
+        (state.address.province = action.payload.address.province),
+        (state.address.city = action.payload.address.city),
         (state.email = action.payload.email),
-        (state.profilePicture = action.payload.profilePicture),
-        (state.mobile = action.payload.mobile);
+        (state.mobile = action.payload.mobile),
+        (state.comments = action.payload.comments),
+        (state.favs = action.payload.favs),
+        (state.products = action.payload.mobile),
+        (state.shoppingHistory = action.payload.shoppingHistory);
     },
     setUserLogin: (state, action) => {
       state.isLogin = action.payload.isLogin;
