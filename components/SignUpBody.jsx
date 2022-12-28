@@ -56,14 +56,14 @@ const SignUpBody = () => {
 
   const getDataUser = async () => {
     await axios
-      .get(`http://localhost:8080/api/users/data`, {
+      .get(`${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URI}/api/users/data`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('granusr')}`,
         },
       })
       .then((res) => {
         const { data } = res;
-        console.log(data.data);
+
         dispatch(
           addUserData({
             profilePicture: data.data.profilePicture,
@@ -84,9 +84,9 @@ const SignUpBody = () => {
           })
         );
       })
-      .catch((err) => {
-        console.error(err);
-        setError(err);
+      .catch((error) => {
+        console.error(error);
+        setError(error);
       });
   };
 
@@ -107,7 +107,8 @@ const SignUpBody = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      fetch('http://localhost:8080/api/users/signup', {
+      // eslint-disable-next-line no-undef
+      fetch(`${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URI}/api/users/signup`, {
         method: 'POST', // or 'PUT'
         headers: {
           'Content-Type': 'application/json',
@@ -116,11 +117,10 @@ const SignUpBody = () => {
       })
         .then((response) => response.json())
         .then((values) => {
-          console.log('Success:', values);
           Cookies.remove('granusr');
           Cookies.set('granusr', values.data.token);
           dispatch(setUserLogin({ isLogin: true }));
-          console.log('Success:', values);
+
           router.push('/');
         })
         .catch((error) => {

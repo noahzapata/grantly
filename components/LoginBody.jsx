@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { addUserData, setUserLogin } from '../store/slices/userSlice';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const validationSchema = yup.object({
   email: yup
@@ -25,18 +25,19 @@ const validationSchema = yup.object({
 const LoginBody = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user);
   const [error, setError] = useState(null);
 
   const getDataUser = async () => {
     await axios
-      .get(`http://localhost:8080/api/users/data`, {
+      .get(`${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URI}/api/users/data`, {
         headers: {
           Authorization: `Bearer ${Cookies.get('granusr')}`,
         },
       })
       .then((res) => {
         const { data } = res;
-        console.log(data.data);
+
         dispatch(
           addUserData({
             profilePicture: data.data.profilePicture,
@@ -56,10 +57,11 @@ const LoginBody = () => {
             shoppingHistory: data.data.shoppingHistory,
           })
         );
+        Cookies.set('userData', JSON.stringify(userData));
       })
-      .catch((err) => {
-        console.error(err);
-        setError(err);
+      .catch((error) => {
+        console.error(error);
+        setError(error);
       });
   };
 
@@ -70,19 +72,22 @@ const LoginBody = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      await fetch('http://localhost:8080/api/users/signin', {
-        method: 'POST', // or 'PUT'
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      })
+      await fetch(
+        `${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URI}/api/users/signin`,
+        {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        }
+      )
         .then((response) => response.json())
         .then((values) => {
           Cookies.remove('granusr');
           Cookies.set('granusr', values.data.token);
           dispatch(setUserLogin({ isLogin: true }));
-          console.log('Success:', values);
+
           router.push('/');
         })
         .catch((error) => {

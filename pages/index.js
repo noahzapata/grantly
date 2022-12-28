@@ -1,5 +1,6 @@
 import Layout from '../components/Layout';
 import ProductCard from '../components/ProductCard';
+
 import styles from '../styles/Home.module.scss';
 
 export default function Home() {

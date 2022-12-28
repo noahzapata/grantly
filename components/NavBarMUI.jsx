@@ -21,7 +21,7 @@ import Link from 'next/link';
 
 const NavBarMUI = () => {
   const router = useRouter();
-  const { firstName, lastName } = useSelector((state) => state.user);
+  const { firstName } = useSelector((state) => state.user);
   const userName = `${firstName}`;
   const user = Cookies.get('granusr');
   const { isExpired } = useJwt(user);
@@ -39,6 +39,7 @@ const NavBarMUI = () => {
 
   const handleLogOut = () => {
     Cookies.remove('granusr');
+    Cookies.remove('userData');
     setAnchorEl(null);
     dispatch(setUserLogin({ isLogin: false }));
     router.push('/');
@@ -127,7 +128,7 @@ const NavBarMUI = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>
-                  <Link href={''}>Create a Product</Link>
+                  <Link href={'/createproduct'}>Create a Product</Link>
                 </MenuItem>
                 <MenuItem onClick={handleLogOut}>Log out</MenuItem>
               </Menu>
